@@ -13,6 +13,7 @@ from rest_framework.decorators import list_route
 from rest_framework.response import Response
 
 # Imports from local apps
+from .filters import VoteFilterSet
 from .models import Vote
 
 from .serializers import VoteSerializer
@@ -21,7 +22,10 @@ from .serializers import VoteSerializer
 class VoteQueryset(viewsets.ModelViewSet):
     queryset = Vote.objects.all()
     serializer_class = VoteSerializer
-    filter_backends = (filters.OrderingFilter, filters.SearchFilter)
+    filter_backends = (filters.DjangoFilterBackend,
+                       filters.OrderingFilter,
+                       filters.SearchFilter)
+    filter_class = VoteFilterSet
 
     def get_serializer_class(self):
         if self.action in ["retrieve", "list", "update", "create"]:
@@ -117,11 +121,13 @@ class VoteQueryset(viewsets.ModelViewSet):
         return Response(vote_count)
 
     @list_route(methods=["GET"])
-    def users(self, request):
+    def users(self, request, *args, **kwargs):
         """
         Returns a list of users who voted and their voting date.
         :param: model, id i.e. model=movies&id=359
         """
+        if request.query_params.get("ids", None):
+            return self.list(request, *args, **kwargs)
 
         model = request.query_params.get("model")
         id = request.query_params.get("id")
