@@ -101,7 +101,7 @@ class VoteQueryset(viewsets.ModelViewSet):
         id = request.query_params.get("id")
         content_type = ContentType.objects.get(model=model)
         instance = content_type.get_object_for_this_type(pk=id)
-        all_instances = instance.votes.all(user).values()
+        all_instances = instance.votes.all(user).values('id')
 
         return Response(all_instances)
 
