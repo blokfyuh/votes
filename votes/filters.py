@@ -16,3 +16,4 @@ class VoteFilterSet(django_filters.FilterSet):
 
     class Meta:
         model = Vote
+        fields = []
