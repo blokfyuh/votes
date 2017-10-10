@@ -1,4 +1,4 @@
-from rest_framework.filters import django_filters
+import django_filters
 
 from .models import Vote
 
