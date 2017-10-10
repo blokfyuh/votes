@@ -5,6 +5,7 @@ from collections import Counter
 
 # Core Django imports
 from django.contrib.contenttypes.models import ContentType
+from django_filters.rest_framework import DjangoFilterBackend
 
 # Third party imports
 from rest_framework import viewsets
@@ -22,7 +23,7 @@ from .serializers import VoteSerializer
 class VoteQueryset(viewsets.ModelViewSet):
     queryset = Vote.objects.all()
     serializer_class = VoteSerializer
-    filter_backends = (filters.DjangoFilterBackend,
+    filter_backends = (DjangoFilterBackend,
                        filters.OrderingFilter,
                        filters.SearchFilter)
     filter_class = VoteFilterSet
